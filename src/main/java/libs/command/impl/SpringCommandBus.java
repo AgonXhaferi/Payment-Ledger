@@ -28,16 +28,16 @@ public class SpringCommandBus implements CommandBus {
         if (handler == null) {
             throw new RuntimeException("No handler found for " + command.getClass().getName());
         }
+
         return handler.handle(command);
     }
 
     private Class<?> getCommandType(CommandHandler handler) {
         Type[] interfaces = handler.getClass().getGenericInterfaces();
+
         for (Type type : interfaces) {
             if (type instanceof ParameterizedType parameterizedType) {
-                // Check if this interface is CommandHandler
                 if (parameterizedType.getRawType().equals(CommandHandler.class)) {
-                    // The first generic argument is the Command type
                     return (Class<?>) parameterizedType.getActualTypeArguments()[0];
                 }
             }

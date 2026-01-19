@@ -1,4 +1,4 @@
-package com.agon.ledger.paymentledgerservice.infrastructure.persistence_entities;
+package com.agon.ledger.paymentledgerservice.infrastructure.persistence.entity;
 
 import com.agon.ledger.paymentledgerservice.infrastructure.base.AuditedPersistenceEntity;
 import jakarta.persistence.Column;

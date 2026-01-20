@@ -21,13 +21,10 @@ public class GetAccountQueryHandler implements QueryHandler<GetAccountQuery, Res
                 new AccountId(query.accountId())
         );
 
-        return accountOptional
-                .<Result<Account, DomainError>>map(Result::ok)
-                .orElseGet(() -> Result.err(
-                        new DomainError.NotFound(
-                                "Account not found",
-                                query.accountId().toString()
-                        )
-                ));
+        if (accountOptional.isEmpty()) {
+            return Result.err(new DomainError.NotFound("Account not found", query.accountId().toString()));
+        }
+
+        return Result.ok(accountOptional.get());
     }
 }

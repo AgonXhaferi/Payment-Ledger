@@ -1,6 +1,6 @@
 package com.agon.ledger.paymentledgerservice.infrastructure.adapters.account.find_account;
 
-import com.agon.ledger.paymentledgerservice.application.ports.LoadAccountPort;
+import com.agon.ledger.paymentledgerservice.application.ports.account.read.LoadAccountPort;
 import com.agon.ledger.paymentledgerservice.domain.entity.AccountEntity;
 import com.agon.ledger.paymentledgerservice.domain.value_object.AccountId;
 import com.agon.ledger.paymentledgerservice.infrastructure.persistence.repository.SpringDataAccountRepository;

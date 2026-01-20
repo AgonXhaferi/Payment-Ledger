@@ -1,4 +1,4 @@
-package com.agon.ledger.paymentledgerservice.application.ports;
+package com.agon.ledger.paymentledgerservice.application.ports.account.read;
 
 import com.agon.ledger.paymentledgerservice.domain.entity.AccountEntity;
 import com.agon.ledger.paymentledgerservice.domain.value_object.AccountId;

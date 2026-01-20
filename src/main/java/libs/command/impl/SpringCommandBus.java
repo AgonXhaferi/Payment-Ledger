@@ -3,46 +3,28 @@ package libs.command.impl;
 import libs.command.Command;
 import libs.command.CommandBus;
 import libs.command.CommandHandler;
+import libs.registry.SpringRegistryHandler;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
+@SuppressWarnings("unchecked")
 public class SpringCommandBus implements CommandBus {
-    private final Map<Class<?>, CommandHandler> handlers = new HashMap<>();
 
-    public SpringCommandBus(List<CommandHandler> commandHandlers) {
-        for (CommandHandler handler : commandHandlers) {
-            Class<?> commandType = getCommandType(handler);
-            handlers.put(commandType, handler);
-        }
+    private final SpringRegistryHandler<Command<?>, CommandHandler> registry;
+
+    public SpringCommandBus(List<CommandHandler> handlers) {
+        this.registry = new SpringRegistryHandler<>(
+                handlers,
+                CommandHandler.class,
+                "Command"
+        );
     }
 
     @Override
     public <R, C extends Command<R>> R execute(C command) {
-        CommandHandler<C, R> handler = handlers.get(command.getClass());
-        if (handler == null) {
-            throw new RuntimeException("No handler found for " + command.getClass().getName());
-        }
-
+        CommandHandler<C, R> handler = (CommandHandler<C, R>) registry.getHandler(command.getClass());
         return handler.handle(command);
-    }
-
-    private Class<?> getCommandType(CommandHandler handler) {
-        Type[] interfaces = handler.getClass().getGenericInterfaces();
-
-        for (Type type : interfaces) {
-            if (type instanceof ParameterizedType parameterizedType) {
-                if (parameterizedType.getRawType().equals(CommandHandler.class)) {
-                    return (Class<?>) parameterizedType.getActualTypeArguments()[0];
-                }
-            }
-        }
-
-        throw new RuntimeException("Could not find command type for handler: " + handler.getClass());
     }
 }

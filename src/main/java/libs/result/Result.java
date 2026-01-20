@@ -16,12 +16,10 @@ public class Result<T, E> {
         this.isSuccess = isSuccess;
     }
 
-    // Factory method for Success (Ok)
     public static <T, E> Result<T, E> ok(T value) {
         return new Result<>(value, null, true);
     }
 
-    // Factory method for Failure (Err)
     public static <T, E> Result<T, E> err(E error) {
         return new Result<>(null, error, false);
     }

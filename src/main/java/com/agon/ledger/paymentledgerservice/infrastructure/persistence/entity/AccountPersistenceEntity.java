@@ -27,8 +27,4 @@ public class AccountPersistenceEntity extends AuditedPersistenceEntity {
 
     @Column(name = "active", nullable = false)
     private boolean active;
-
-    @Version
-    @Column(name = "version")
-    private Long version;
 }

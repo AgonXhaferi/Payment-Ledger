@@ -4,17 +4,17 @@ import com.agon.ledger.paymentledgerservice.domain.value_object.AccountId;
 
 import java.math.BigDecimal;
 
-public class AccountEntity {
+public class Account {
     private final AccountId id;
     private BigDecimal balance;
     private final String currency;
     private Long version;
 
-    public static AccountEntity create(AccountId id, String currency) {
-        return new AccountEntity(id, BigDecimal.ZERO, currency, 0L);
+    public static Account create(AccountId id, String currency) {
+        return new Account(id, BigDecimal.ZERO, currency, 0L);
     }
 
-    public AccountEntity(
+    public Account(
             AccountId id,
             BigDecimal balance,
             String currency,
@@ -43,8 +43,19 @@ public class AccountEntity {
         this.balance = this.balance.subtract(amount);
     }
 
-    public AccountId getId() { return id; }
-    public BigDecimal getBalance() { return balance; }
-    public String getCurrency() { return currency; }
-    public Long getVersion() { return version; }
+    public AccountId getId() {
+        return id;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
 }

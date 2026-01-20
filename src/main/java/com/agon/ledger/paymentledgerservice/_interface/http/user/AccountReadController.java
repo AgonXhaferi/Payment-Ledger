@@ -2,7 +2,7 @@ package com.agon.ledger.paymentledgerservice._interface.http.user;
 
 import com.agon.ledger.paymentledgerservice._interface.http.mapper.HttpExceptionMapper;
 import com.agon.ledger.paymentledgerservice.application.queries.GetAccountQuery;
-import com.agon.ledger.paymentledgerservice.domain.entity.AccountEntity;
+import com.agon.ledger.paymentledgerservice.domain.entity.Account;
 import libs.query.QueryBus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class AccountReadController {
     private final HttpExceptionMapper httpExceptionMapper;
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountEntity> findAccount(@PathVariable UUID id) {
+    public ResponseEntity<Account> findAccount(@PathVariable UUID id) {
         var result = queryBus.execute(new GetAccountQuery(id));
 
         if (result.isFailure()) {

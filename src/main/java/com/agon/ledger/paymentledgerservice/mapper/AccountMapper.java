@@ -1,14 +1,14 @@
 package com.agon.ledger.paymentledgerservice.mapper;
 
-import com.agon.ledger.paymentledgerservice.domain.entity.AccountEntity;
+import com.agon.ledger.paymentledgerservice.domain.entity.Account;
 import com.agon.ledger.paymentledgerservice.domain.value_object.AccountId;
 import com.agon.ledger.paymentledgerservice.infrastructure.persistence.entity.AccountPersistenceEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AccountMapper {
-    public AccountEntity toDomain(AccountPersistenceEntity entity) {
-        return new AccountEntity(
+    public Account toDomain(AccountPersistenceEntity entity) {
+        return new Account(
                 new AccountId(entity.getId()),
                 entity.getBalance(),
                 entity.getCurrency(),
@@ -16,14 +16,18 @@ public class AccountMapper {
         );
     }
 
-    public AccountPersistenceEntity toEntity(AccountEntity domain) {
-        AccountPersistenceEntity entity = new AccountPersistenceEntity();
-        //look into builder pattern.
+    public AccountPersistenceEntity toPersistence(Account domain) {
+        var entity = new AccountPersistenceEntity();
         entity.setId(domain.getId().value());
         entity.setBalance(domain.getBalance());
         entity.setCurrency(domain.getCurrency());
         entity.setActive(true);
-        entity.setVersion(domain.getVersion());
+
+        if (domain.getVersion() == null || domain.getVersion() == 0) {
+            entity.setVersion(null);
+        } else {
+            entity.setVersion(domain.getVersion());
+        }
 
         return entity;
     }

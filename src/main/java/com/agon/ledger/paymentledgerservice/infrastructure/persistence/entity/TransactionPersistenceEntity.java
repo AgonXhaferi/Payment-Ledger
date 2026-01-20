@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "transactions", schema = "ledger")
@@ -20,10 +21,10 @@ import java.time.Instant;
 @AllArgsConstructor
 public class TransactionPersistenceEntity extends AuditedPersistenceEntity {
     @Column(name = "source_account_id", nullable = false)
-    private String sourceAccountId;
+    private UUID sourceAccountId;
 
     @Column(name = "target_account_id", nullable = false)
-    private String targetAccountId;
+    private UUID targetAccountId;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;

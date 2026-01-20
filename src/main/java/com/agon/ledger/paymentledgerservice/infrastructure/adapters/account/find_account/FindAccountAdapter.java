@@ -1,7 +1,7 @@
 package com.agon.ledger.paymentledgerservice.infrastructure.adapters.account.find_account;
 
 import com.agon.ledger.paymentledgerservice.application.ports.account.read.LoadAccountPort;
-import com.agon.ledger.paymentledgerservice.domain.entity.AccountEntity;
+import com.agon.ledger.paymentledgerservice.domain.entity.Account;
 import com.agon.ledger.paymentledgerservice.domain.value_object.AccountId;
 import com.agon.ledger.paymentledgerservice.infrastructure.persistence.repository.SpringDataAccountRepository;
 import com.agon.ledger.paymentledgerservice.mapper.AccountMapper;
@@ -17,7 +17,7 @@ public class FindAccountAdapter implements LoadAccountPort {
     private final AccountMapper mapper;
 
     @Override
-    public Optional<AccountEntity> loadAccount(AccountId id) {
+    public Optional<Account> loadAccount(AccountId id) {
         var entity = repository.findById(id.value());
 
         return entity.map(mapper::toDomain);

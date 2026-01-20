@@ -1,0 +1,2 @@
+ALTER TABLE ledger.transactions
+    ADD COLUMN IF NOT EXISTS version BIGINT DEFAULT 0;

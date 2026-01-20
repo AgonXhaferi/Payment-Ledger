@@ -22,6 +22,7 @@ public class SpringRegistryHandler<M, H> {
             if (registry.containsKey(messageType)) {
                 throw new IllegalStateException("Duplicate handler found for " + handlerName + ": " + messageType.getName());
             }
+
             registry.put(messageType, handler);
         }
     }

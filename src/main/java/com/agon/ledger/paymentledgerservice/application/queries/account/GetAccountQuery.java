@@ -1,4 +1,4 @@
-package com.agon.ledger.paymentledgerservice.application.queries;
+package com.agon.ledger.paymentledgerservice.application.queries.account;
 
 import com.agon.ledger.paymentledgerservice.domain.entity.Account;
 import com.agon.ledger.paymentledgerservice.shared.domain_error.DomainError;

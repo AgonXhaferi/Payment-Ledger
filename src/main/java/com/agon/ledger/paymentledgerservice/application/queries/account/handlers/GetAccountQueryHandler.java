@@ -1,7 +1,7 @@
-package com.agon.ledger.paymentledgerservice.application.queries.handlers;
+package com.agon.ledger.paymentledgerservice.application.queries.account.handlers;
 
 import com.agon.ledger.paymentledgerservice.application.ports.account.read.LoadAccountPort;
-import com.agon.ledger.paymentledgerservice.application.queries.GetAccountQuery;
+import com.agon.ledger.paymentledgerservice.application.queries.account.GetAccountQuery;
 import com.agon.ledger.paymentledgerservice.domain.entity.Account;
 import com.agon.ledger.paymentledgerservice.domain.value_object.AccountId;
 import com.agon.ledger.paymentledgerservice.shared.domain_error.DomainError;

@@ -1,7 +1,7 @@
-package com.agon.ledger.paymentledgerservice._interface.http.user;
+package com.agon.ledger.paymentledgerservice._interface.http.account;
 
 import com.agon.ledger.paymentledgerservice._interface.http.mapper.HttpExceptionMapper;
-import com.agon.ledger.paymentledgerservice.application.queries.GetAccountQuery;
+import com.agon.ledger.paymentledgerservice.application.queries.account.GetAccountQuery;
 import com.agon.ledger.paymentledgerservice.domain.entity.Account;
 import libs.query.QueryBus;
 import lombok.RequiredArgsConstructor;

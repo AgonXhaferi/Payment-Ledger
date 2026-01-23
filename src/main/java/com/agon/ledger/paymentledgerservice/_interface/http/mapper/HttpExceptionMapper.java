@@ -14,6 +14,8 @@ public class HttpExceptionMapper {
             case DomainError.Validation e -> new ResponseStatusException(HttpStatus.BAD_REQUEST, e.message());
 
             case DomainError.Conflict e -> new ResponseStatusException(HttpStatus.CONFLICT, e.message());
+
+            case DomainError.BadRequest e -> new ResponseStatusException(HttpStatus.BAD_REQUEST, e.message());
         };
     }
 }

@@ -23,7 +23,7 @@ public class AccountMapper {
         entity.setCurrency(domain.getCurrency());
         entity.setActive(true);
 
-        if (domain.getVersion() == null || domain.getVersion() == 0) {
+        if (domain.getVersion() == null) {
             entity.setVersion(null);
         } else {
             entity.setVersion(domain.getVersion());

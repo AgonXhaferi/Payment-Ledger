@@ -40,4 +40,7 @@ public class TransactionPersistenceEntity extends AuditedPersistenceEntity {
 
     @Column(name = "status", nullable = false)
     private String status;
+
+    @Column(name = "currency", nullable = false, length = 3)
+    private String currency;
 }

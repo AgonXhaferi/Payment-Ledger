@@ -1,4 +1,4 @@
-package com.agon.ledger.paymentledgerservice.application.commands;
+package com.agon.ledger.paymentledgerservice.application.commands.account;
 
 import com.agon.ledger.paymentledgerservice.shared.domain_error.DomainError;
 import libs.command.Command;

@@ -1,6 +1,6 @@
-package com.agon.ledger.paymentledgerservice.application.commands.handlers;
+package com.agon.ledger.paymentledgerservice.application.commands.account.handlers;
 
-import com.agon.ledger.paymentledgerservice.application.commands.CreateAccountCommand;
+import com.agon.ledger.paymentledgerservice.application.commands.account.CreateAccountCommand;
 import com.agon.ledger.paymentledgerservice.application.ports.account.write.SaveAccountPort;
 import com.agon.ledger.paymentledgerservice.domain.entity.Account;
 import com.agon.ledger.paymentledgerservice.domain.value_object.AccountId;
@@ -26,7 +26,7 @@ public class CreateAccountCommandHandler implements CommandHandler<
         Account newAccount = Account.create(id, command.currency());
 
         try {
-            createAccountPort.saveAccount(newAccount);
+            createAccountPort.save(newAccount);
 
             return Result.ok(id.value());
         } catch (Exception ex) {

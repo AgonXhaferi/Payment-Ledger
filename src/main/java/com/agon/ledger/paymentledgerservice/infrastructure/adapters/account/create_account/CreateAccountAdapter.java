@@ -15,7 +15,7 @@ public class CreateAccountAdapter implements SaveAccountPort {
 
 
     @Override
-    public void saveAccount(Account account) {
+    public void save(Account account) {
         var dbEntity = mapper.toPersistence(account);
 
         repository.save(dbEntity);

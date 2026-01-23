@@ -2,9 +2,10 @@ package com.agon.ledger.paymentledgerservice.shared.domain_error;
 
 
 public sealed interface DomainError permits
+        DomainError.BadRequest,
+        DomainError.Conflict,
         DomainError.NotFound,
-        DomainError.Validation,
-        DomainError.Conflict {
+        DomainError.Validation {
 
     String message();
 
@@ -28,6 +29,13 @@ public sealed interface DomainError permits
         @Override
         public String code() {
             return "CONFLICT";
+        }
+    }
+
+    record BadRequest(String message) implements DomainError {
+        @Override
+        public String code() {
+            return "BAD_REQUEST";
         }
     }
 }

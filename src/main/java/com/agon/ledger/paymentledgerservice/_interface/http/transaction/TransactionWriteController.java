@@ -1,8 +1,9 @@
-package com.agon.ledger.paymentledgerservice._interface.http.user;
+package com.agon.ledger.paymentledgerservice._interface.http.transaction;
+
 
 import com.agon.ledger.paymentledgerservice._interface.http.mapper.HttpExceptionMapper;
-import com.agon.ledger.paymentledgerservice._interface.http.request.CreateAccountRequest;
-import com.agon.ledger.paymentledgerservice.application.commands.CreateAccountCommand;
+import com.agon.ledger.paymentledgerservice._interface.http.request.TransferFundsRequest;
+import com.agon.ledger.paymentledgerservice.application.commands.transaction.TransferFundsCommand;
 import com.agon.ledger.paymentledgerservice.shared.domain_error.DomainError;
 import libs.command.CommandBus;
 import libs.result.Result;
@@ -17,15 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/transactions")
 @RequiredArgsConstructor
-public class AccountWriteController {
+public class TransactionWriteController {
     private final CommandBus commandBus;
     private final HttpExceptionMapper httpExceptionMapper;
 
     @PostMapping
-    public ResponseEntity<UUID> createAccount(@RequestBody CreateAccountRequest request) {
-        var command = new CreateAccountCommand(request.currency());
+    public ResponseEntity<UUID> createAccount(@RequestBody TransferFundsRequest request) {
+        var command = new TransferFundsCommand(
+                request.sourceAccountId(),
+                request.targetAccountId(),
+                request.amount(),
+                request.currency(),
+                request.reference(),
+                request.idempotencyKey()
+        );
 
         Result<UUID, DomainError> result = commandBus.execute(command);
 

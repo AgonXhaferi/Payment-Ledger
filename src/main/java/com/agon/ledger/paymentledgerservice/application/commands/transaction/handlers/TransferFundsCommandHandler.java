@@ -15,6 +15,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -30,16 +31,19 @@ public class TransferFundsCommandHandler implements CommandHandler<
     private final SaveTransactionPort saveTransactionPort;
 
     @Override
-    @Transactional
     @Retryable(
             retryFor = {
                     OptimisticLockingFailureException.class,
                     DataIntegrityViolationException.class
             },
-            maxAttempts = 3,
-            backoff = @Backoff(delay = 50, multiplier = 2)
+            maxAttempts = 10,
+            backoff = @Backoff(delay = 100, multiplier = 2)
     )
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Result<UUID, DomainError> handle(TransferFundsCommand command) {
+
+        System.out.println("RETRY DEBUG: Running on " + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+
         var sourceAccountOptional = loadAccountPort.loadAccount(new AccountId(command.sourceAccountId()));
         if (sourceAccountOptional.isEmpty()) {
             return Result.err(new DomainError.NotFound("Source account not found", command.sourceAccountId().toString()));

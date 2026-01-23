@@ -25,7 +25,11 @@ public class AccountWriteController {
 
     @PostMapping
     public ResponseEntity<UUID> createAccount(@RequestBody CreateAccountRequest request) {
-        var command = new CreateAccountCommand(request.currency());
+        var command = new CreateAccountCommand(
+                request.accountId(),
+                request.amount(),
+                request.currency()
+        );
 
         Result<UUID, DomainError> result = commandBus.execute(command);
 

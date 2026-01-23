@@ -11,7 +11,7 @@ public class Account {
     private Long version;
 
     public static Account create(AccountId id, String currency) {
-        return new Account(id, BigDecimal.ZERO, currency, 0L);
+        return new Account(id, BigDecimal.ZERO, currency, null);
     }
 
     public Account(

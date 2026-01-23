@@ -18,6 +18,7 @@ public class AccountMapper {
 
     public AccountPersistenceEntity toPersistence(Account domain) {
         var entity = new AccountPersistenceEntity();
+
         entity.setId(domain.getId().value());
         entity.setBalance(domain.getBalance());
         entity.setCurrency(domain.getCurrency());

@@ -25,7 +25,7 @@ public class TransactionWriteController {
     private final HttpExceptionMapper httpExceptionMapper;
 
     @PostMapping
-    public ResponseEntity<UUID> createAccount(@RequestBody TransferFundsRequest request) {
+    public ResponseEntity<UUID> transferFunds(@RequestBody TransferFundsRequest request) {
         var command = new TransferFundsCommand(
                 request.sourceAccountId(),
                 request.targetAccountId(),

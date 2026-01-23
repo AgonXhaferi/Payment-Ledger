@@ -10,6 +10,10 @@ import com.agon.ledger.paymentledgerservice.shared.domain_error.DomainError;
 import libs.command.CommandHandler;
 import libs.result.Result;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +31,14 @@ public class TransferFundsCommandHandler implements CommandHandler<
 
     @Override
     @Transactional
+    @Retryable(
+            retryFor = {
+                    OptimisticLockingFailureException.class,
+                    DataIntegrityViolationException.class
+            },
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 50, multiplier = 2)
+    )
     public Result<UUID, DomainError> handle(TransferFundsCommand command) {
         var sourceAccountOptional = loadAccountPort.loadAccount(new AccountId(command.sourceAccountId()));
         if (sourceAccountOptional.isEmpty()) {

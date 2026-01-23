@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @ComponentScan({
-        "com.agon.ledger.paymentledgerservice", // Scan your main app
-        "libs"                                  // Scan the libs folder
+        "com.agon.ledger.paymentledgerservice",
+        "libs"
 })
 @EnableJpaAuditing
 public class PaymentLedgerServiceApplication {

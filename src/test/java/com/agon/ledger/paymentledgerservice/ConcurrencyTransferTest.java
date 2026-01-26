@@ -49,51 +49,49 @@ public class ConcurrencyTransferTest {
         ));
 
         int threadCount = 10;
-        var executor = Executors.newFixedThreadPool(threadCount);
 
         var startLatch = new CountDownLatch(1);
-
         var finishLatch = new CountDownLatch(threadCount);
 
         var successCount = new AtomicInteger(0);
         var failCount = new AtomicInteger(0);
 
-        for (int i = 0; i < threadCount; i++) {
-            executor.submit(() -> {
-                try {
-                    startLatch.await(); // Wait for the gun
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
-                    var result = commandBus.execute(new TransferFundsCommand(
-                            sourceId,
-                            targetId,
-                            new BigDecimal("10.00"),
-                            "USD",
-                            "Concurrent Test",
-                            UUID.randomUUID().toString()
-                    ));
+            for (int i = 0; i < threadCount; i++) {
+                executor.submit(() -> {
+                    try {
+                        startLatch.await();
 
-                    if (result.isSuccess()) {
-                        successCount.incrementAndGet();
-                    } else {
+                        var result = commandBus.execute(new TransferFundsCommand(
+                                sourceId,
+                                targetId,
+                                new BigDecimal("10.00"),
+                                "USD",
+                                "Concurrent Test",
+                                UUID.randomUUID().toString()
+                        ));
+
+                        if (result.isSuccess()) {
+                            successCount.incrementAndGet();
+                        } else {
+                            failCount.incrementAndGet();
+                            System.out.println("Failed: " + result.getError().message());
+                        }
+                    } catch (Exception e) {
                         failCount.incrementAndGet();
-                        System.out.println("Failed: " + result.getError().message());
+                        e.printStackTrace();
+                    } finally {
+                        finishLatch.countDown(); // 3. Cross the finish line
                     }
-                } catch (Exception e) {
-                    failCount.incrementAndGet();
-                    e.printStackTrace();
-                } finally {
-                    finishLatch.countDown();
-                }
-            });
+                });
+            }
+
+            startLatch.countDown();
+
+            boolean allFinished = finishLatch.await(70, TimeUnit.SECONDS);
+            Assertions.assertTrue(allFinished, "Not all virtual threads finished in time!");
         }
-
-        startLatch.countDown();
-
-        boolean allFinished = finishLatch.await(100, TimeUnit.SECONDS);
-
-        executor.shutdown();
-
-        Assertions.assertTrue(allFinished, "Not all threads finished in time!");
 
         var source = loadAccountPort.loadAccount(new AccountId(sourceId)).orElseThrow();
         var target = loadAccountPort.loadAccount(new AccountId(targetId)).orElseThrow();
@@ -103,9 +101,10 @@ public class ConcurrencyTransferTest {
         System.out.println("Successes: " + successCount.get());
         System.out.println("Failures: " + failCount.get());
 
-        Assertions.assertEquals(10, successCount.get(), "All transfers should succeed");
-        Assertions.assertEquals(0, failCount.get());
+        Assertions.assertEquals(10, successCount.get(), "All transfers should succeed due to @Retryable");
+        Assertions.assertEquals(0, failCount.get(), "There should be zero failures");
+
         Assertions.assertEquals(0, new BigDecimal("900.00").compareTo(source.getBalance()));
-        Assertions.assertEquals(0, new BigDecimal("100.00").compareTo(target.getBalance()));
-    }
+
+        Assertions.assertEquals(0, new BigDecimal("100.00").compareTo(target.getBalance()));   }
 }
